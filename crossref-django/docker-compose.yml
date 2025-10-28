@@ -1,0 +1,18 @@
+
+services:
+  web:
+    build: 
+      context: .
+    env_file:
+      - .env
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             gunicorn crossref_project.wsgi:application --bind 0.0.0.0:8080"
+    volumes:
+      - .:/code
+      - sqlite_data:/code/db_data
+    ports:
+      - "8080:8080"
+
+volumes:
+  sqlite_data:
